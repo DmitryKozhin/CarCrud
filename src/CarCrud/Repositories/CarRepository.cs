@@ -60,10 +60,5 @@ namespace CarCrud.Repositories
             if (!updateResult.IsAcknowledged)
                 throw new InvalidOperationException($"Cannot be update car {carDto}");
         }
-
-        public void Dispose()
-        {
-            _carContext.Dispose();
-        }
     }
 }

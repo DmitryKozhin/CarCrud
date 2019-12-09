@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CarCrud.Repositories
 {
-    public interface ICarRepository : IDisposable
+    public interface ICarRepository
     {
         Task<IEnumerable<Car>> Get();
         Task<Car> Get(int id);

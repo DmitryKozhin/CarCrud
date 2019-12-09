@@ -11,7 +11,7 @@ using Xunit;
 
 namespace CarCrud.Tests
 {
-    public class CarsControllerTests : IDisposable
+    public class CarsControllerTests
     {
         private readonly ICarRepository _carRepository = new FakeRepository();
 
@@ -137,11 +137,6 @@ namespace CarCrud.Tests
             //Assert
             var listOfCars = await _carRepository.Get();
             listOfCars.Count().Should().Be(1);
-        }
-
-        public void Dispose()
-        {
-            _carRepository.Dispose();
         }
     }
 }

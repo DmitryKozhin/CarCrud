@@ -56,10 +56,5 @@ namespace CarCrud.Tests
             existingCar.Name = car.Name;
             existingCar.Description = car.Description;
         }
-
-        public void Dispose()
-        {
-            _cars = new List<Car>();
-        }
     }
 }

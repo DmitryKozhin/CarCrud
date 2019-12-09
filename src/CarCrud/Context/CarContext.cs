@@ -5,22 +5,16 @@ using MongoDB.Driver;
 
 namespace CarCrud.Context
 {
-    public class CarContext : IDisposable
+    public class CarContext
     {
         private readonly IMongoDatabase _mongoDatabase;
-        private readonly MongoClient _client;
 
         public CarContext(string databaseName)
         {
-            _client = new MongoClient();
-            _mongoDatabase = _client.GetDatabase(databaseName);
+            var client = new MongoClient();
+            _mongoDatabase = client.GetDatabase(databaseName);
         }
 
         public IMongoCollection<Car> Cars => _mongoDatabase.GetCollection<Car>(nameof(Cars));
-
-        public void Dispose()
-        {
-            _client.Cluster.Dispose();
-        }
     }
 }
