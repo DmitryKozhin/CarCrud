@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CarCrud.Context;
+using CarCrud.Middlewares;
 using CarCrud.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +48,7 @@ namespace CarCrud
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/api/swagger.json", "Api"));
