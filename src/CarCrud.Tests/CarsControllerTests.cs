@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-
+using System.Threading.Tasks;
 using CarCrud.Controllers;
 using CarCrud.Models;
 using CarCrud.Repositories;
@@ -16,16 +16,16 @@ namespace CarCrud.Tests
         private readonly ICarRepository _carRepository = new FakeRepository();
 
         [Fact]
-        public async void CreateOrUpdate_CreateSomeCar_NotExistException()
+        public async void Create_CreateSomeCar_NotExistException()
         {
             //Arrange
             var controller = new CarsController(_carRepository);
             var exceptedName = "car1";
             var exceptedDescription = "desc1";
-            var carDto = new CarDto { Name = exceptedName, Description = exceptedDescription };
+            var carDto = new CreateCarDto { Name = exceptedName, Description = exceptedDescription };
 
             //Act
-            await controller.CreateOrUpdate(carDto);
+            await controller.Create(carDto);
 
             //Assert
             var allCars = await _carRepository.Get();
@@ -36,19 +36,18 @@ namespace CarCrud.Tests
         }
 
         [Fact]
-        public async void CreateOrUpdate_UpdateSomeCar_NotExistException()
+        public async void Update_UpdateSomeCar_NotExistException()
         {
             //Arrange
             var controller = new CarsController(_carRepository);
-            var carDto = new CarDto { Name = "car1", Description = "desc1" };
-            await _carRepository.Add(carDto);
+            await CreateCar("car1", "desc1");
 
             var exceptedChangeName = "car1";
             var exceptedChangeDescription = "desc1";
-            var updateCarDto = new CarDto() {Id = 1, Name = exceptedChangeName, Description = exceptedChangeDescription };
+            var updateCarDto = new UpdateCarDto() {Id = 1, Name = exceptedChangeName, Description = exceptedChangeDescription };
 
             //Act
-            await controller.CreateOrUpdate(updateCarDto);
+            await controller.Update(updateCarDto);
 
             //Assert
             var allCars = await _carRepository.Get();
@@ -59,14 +58,14 @@ namespace CarCrud.Tests
         }
 
         [Fact]
-        public async void CreateOrUpdate_TryToUpdateNotExistCar_ExistException()
+        public async void Update_TryToUpdateNotExistCar_ExistException()
         {
             //Arrange
             var controller = new CarsController(_carRepository);
-            var updateCarDto = new CarDto() { Id = default(int), Name = "car1", Description = "desc1" };
+            var updateCarDto = new UpdateCarDto() { Id = default(int), Name = "car1", Description = "desc1" };
 
             //Act/Assert
-            await controller.Invoking(t => t.CreateOrUpdate(updateCarDto)).Should().ThrowAsync<InvalidOperationException>();
+            await controller.Invoking(t => t.Update(updateCarDto)).Should().ThrowAsync<InvalidOperationException>();
         }
 
         [Fact]
@@ -76,11 +75,11 @@ namespace CarCrud.Tests
             var controller = new CarsController(_carRepository);
             var exceptedName = "car1";
             var exceptedDescription = "desc1";
-            await _carRepository.Add(new CarDto { Name = exceptedName, Description = exceptedDescription });
+            await CreateCar(exceptedName, exceptedDescription);
 
             var exceptedName2 = "car2";
             var exceptedDescription2 = "desc2";
-            await _carRepository.Add(new CarDto { Name = exceptedName2, Description = exceptedDescription2 });
+            await CreateCar(exceptedName2, exceptedDescription2);
 
             //Act
             var result = await controller.Get();
@@ -105,7 +104,7 @@ namespace CarCrud.Tests
             var controller = new CarsController(_carRepository);
             var exceptedName = "car1";
             var exceptedDescription = "desc1";
-            await _carRepository.Add(new CarDto { Name = exceptedName, Description = exceptedDescription });
+            await CreateCar(exceptedName, exceptedDescription);
 
             var findingId = 1;
 
@@ -125,11 +124,11 @@ namespace CarCrud.Tests
             var controller = new CarsController(_carRepository);
             var exceptedName = "car1";
             var exceptedDescription = "desc1";
-            await _carRepository.Add(new CarDto { Name = exceptedName, Description = exceptedDescription });
+            await CreateCar(exceptedName, exceptedDescription);
 
             var exceptedName2 = "car2";
             var exceptedDescription2 = "desc2";
-            await _carRepository.Add(new CarDto { Name = exceptedName2, Description = exceptedDescription2 });
+            await CreateCar(exceptedName2, exceptedDescription2);
 
             //Act
             await controller.Delete(1);
@@ -137,6 +136,12 @@ namespace CarCrud.Tests
             //Assert
             var listOfCars = await _carRepository.Get();
             listOfCars.Count().Should().Be(1);
+        }
+
+        private async Task CreateCar(string name, string description)
+        {
+            var car = new CreateCarDto {Name = name, Description = description};
+            await _carRepository.Add(car);
         }
     }
 }

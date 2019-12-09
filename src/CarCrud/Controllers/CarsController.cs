@@ -30,12 +30,15 @@ namespace CarCrud.Controllers
         }
 
         [HttpPost]
-        public async Task CreateOrUpdate([FromBody] CarDto carDto)
+        public async Task Create([FromBody] CreateCarDto carDto)
         {
-            if (carDto.Id.HasValue)
-                await _carRepository.Update(carDto);
-            else
-                await _carRepository.Add(carDto);
+            await _carRepository.Add(carDto);
+        }
+
+        [HttpPut]
+        public async Task Update([FromBody] UpdateCarDto carDto)
+        {
+            await _carRepository.Update(carDto);
         }
 
         [HttpDelete("{id}")]

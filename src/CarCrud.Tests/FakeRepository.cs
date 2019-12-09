@@ -10,18 +10,14 @@ namespace CarCrud.Tests
 {
     public class FakeRepository : ICarRepository
     {
-        private List<Car> _cars = new List<Car>();
+        private readonly List<Car> _cars = new List<Car>();
 
-        public async Task Add(CarDto carDto)
+        public async Task Add(CreateCarDto carDto)
         {
             await Task.Delay(1);
             var count = _cars.Count + 1;
-            var car = new Car
-            {
-                Id = (int)count,
-                Name = carDto.Name,
-                Description = carDto.Description
-            };
+            var car = new Car();
+            car.FromDto(carDto, (int)count);
 
             _cars.Add(car);
         }
@@ -45,16 +41,13 @@ namespace CarCrud.Tests
             return _cars.FirstOrDefault(t => t.Id == id);
         }
 
-        public async Task Update(CarDto carDto)
+        public async Task Update(UpdateCarDto carDto)
         {
             var existingCar = await Get(carDto.Id.Value);
             if (existingCar == null)
                 throw new InvalidOperationException($"Car with id: {carDto.Id} is not exist");
 
-            var car = Car.FromDto(carDto);
-            existingCar.Id = car.Id;
-            existingCar.Name = car.Name;
-            existingCar.Description = car.Description;
+            existingCar.FromDto(carDto, carDto.Id.Value);
         }
     }
 }

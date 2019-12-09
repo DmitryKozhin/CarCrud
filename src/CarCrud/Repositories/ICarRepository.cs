@@ -10,8 +10,8 @@ namespace CarCrud.Repositories
     {
         Task<IEnumerable<Car>> Get();
         Task<Car> Get(int id);
-        Task Add(CarDto carDto);
-        Task Update(CarDto carDto);
+        Task Add(CreateCarDto carDto);
+        Task Update(UpdateCarDto carDto);
         Task Delete(int id);
     }
 }

@@ -1,11 +1,5 @@
 ﻿using System;
-
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using System.Linq;
 
 namespace CarCrud.Models
 {
@@ -17,18 +11,36 @@ namespace CarCrud.Models
         [BsonRequired]
         public string Name { get; set; }
         public string Description { get; set; }
+    }
 
-        public static Car FromDto(CarDto dto)
+    public static class CarExtensions
+    {
+        public static void FromDto(this Car car, UpdateCarDto dto, int id)
         {
             if (!dto.Id.HasValue)
                 throw new ArgumentException($"DTO for update model should contain {nameof(dto.Id)}");
 
-            return new Car
-            {
-                Id = dto.Id.Value,
-                Name = dto.Name ?? throw new ArgumentException("Car name is required"),
-                Description = dto.Description,
-            };
+            
+            car.Id = id;
+            car.Description = dto.Description;
+
+            if (string.Equals(dto.Name, string.Empty))
+                throw new ArgumentException("Car name is required");
+
+            car.Name = dto.Name ?? car.Name;
         }
-    }   
+
+        public static void FromDto(this Car car, CreateCarDto dto, int id)
+        {
+            if (dto.Id.HasValue)
+                throw new ArgumentException($"DTO for create cannot contain {nameof(dto.Id)}");
+
+            car.Id = id;
+            car.Name = string.IsNullOrEmpty(dto.Name)
+                ? throw new ArgumentException("Car name is required")
+                : dto.Name;
+
+            car.Description = dto.Description;
+        }
+    }
 }
