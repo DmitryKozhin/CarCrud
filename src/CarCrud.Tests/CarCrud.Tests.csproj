@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\CarCrud.csproj" />
+    <ProjectReference Include="..\CarCrud\CarCrud.csproj" />
   </ItemGroup>
 
 </Project>
