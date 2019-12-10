@@ -56,7 +56,7 @@ namespace CarCrud
 
         private void InitializeIoc(IServiceCollection services)
         {
-            services.AddScoped(_ => new CarContext("carstore"));
+            services.AddScoped<CarContext, CarContext>();
             services.AddScoped<ICarRepository, CarRepository>();
         }
     }
