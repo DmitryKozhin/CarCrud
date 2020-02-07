@@ -17,10 +17,6 @@ namespace CarCrud.Models
     {
         public static void FromDto(this Car car, UpdateCarDto dto, int id)
         {
-            if (!dto.Id.HasValue)
-                throw new ArgumentException($"DTO for update model should contain {nameof(dto.Id)}");
-
-            
             car.Id = id;
             car.Description = dto.Description;
 
@@ -32,9 +28,6 @@ namespace CarCrud.Models
 
         public static void FromDto(this Car car, CreateCarDto dto, int id)
         {
-            if (dto.Id.HasValue)
-                throw new ArgumentException($"DTO for create cannot contain {nameof(dto.Id)}");
-
             car.Id = id;
             car.Name = string.IsNullOrEmpty(dto.Name)
                 ? throw new ArgumentException("Car name is required")

@@ -46,13 +46,13 @@ namespace CarCrud.Repositories
             return await _carContext.Cars.Find(new BsonDocument(ID_FIELD, id)).FirstOrDefaultAsync();
         }
 
-        public async Task Update(UpdateCarDto carDto)
+        public async Task Update(int id, UpdateCarDto carDto)
         {
-            var existingCar = await Get(carDto.Id.Value);
+            var existingCar = await Get(id);
             if (existingCar == null)
-                throw new InvalidOperationException($"Car with id: {carDto.Id} is not exist");
+                throw new InvalidOperationException($"Car with id: {id} is not exist");
 
-            existingCar.FromDto(carDto, carDto.Id.Value);
+            existingCar.FromDto(carDto, id);
 
             var updateResult = await _carContext.Cars.ReplaceOneAsync(new BsonDocument(ID_FIELD, existingCar.Id), existingCar);
             if (!updateResult.IsAcknowledged)

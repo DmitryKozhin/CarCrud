@@ -35,10 +35,10 @@ namespace CarCrud.Controllers
             await _carRepository.Add(carDto);
         }
 
-        [HttpPut]
-        public async Task Update([FromBody] UpdateCarDto carDto)
+        [HttpPut("{id}")]
+        public async Task Update(int id, [FromBody] UpdateCarDto carDto)
         {
-            await _carRepository.Update(carDto);
+            await _carRepository.Update(id, carDto);
         }
 
         [HttpDelete("{id}")]

@@ -44,10 +44,10 @@ namespace CarCrud.Tests
 
             var exceptedChangeName = "car1";
             var exceptedChangeDescription = "desc1";
-            var updateCarDto = new UpdateCarDto() {Id = 1, Name = exceptedChangeName, Description = exceptedChangeDescription };
+            var updateCarDto = new UpdateCarDto() {Name = exceptedChangeName, Description = exceptedChangeDescription };
 
             //Act
-            await controller.Update(updateCarDto);
+            await controller.Update(1, updateCarDto);
 
             //Assert
             var allCars = await _carRepository.Get();
@@ -62,10 +62,10 @@ namespace CarCrud.Tests
         {
             //Arrange
             var controller = new CarsController(_carRepository);
-            var updateCarDto = new UpdateCarDto() { Id = default(int), Name = "car1", Description = "desc1" };
+            var updateCarDto = new UpdateCarDto() { Name = "car1", Description = "desc1" };
 
             //Act/Assert
-            await controller.Invoking(t => t.Update(updateCarDto)).Should().ThrowAsync<InvalidOperationException>();
+            await controller.Invoking(t => t.Update(default(int), updateCarDto)).Should().ThrowAsync<InvalidOperationException>();
         }
 
         [Fact]

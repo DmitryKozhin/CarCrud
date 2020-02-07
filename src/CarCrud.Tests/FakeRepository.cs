@@ -41,13 +41,13 @@ namespace CarCrud.Tests
             return _cars.FirstOrDefault(t => t.Id == id);
         }
 
-        public async Task Update(UpdateCarDto carDto)
+        public async Task Update(int id, UpdateCarDto carDto)
         {
-            var existingCar = await Get(carDto.Id.Value);
+            var existingCar = await Get(id);
             if (existingCar == null)
-                throw new InvalidOperationException($"Car with id: {carDto.Id} is not exist");
+                throw new InvalidOperationException($"Car with id: {id} is not exist");
 
-            existingCar.FromDto(carDto, carDto.Id.Value);
+            existingCar.FromDto(carDto, id);
         }
     }
 }
